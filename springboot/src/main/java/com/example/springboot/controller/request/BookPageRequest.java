@@ -6,4 +6,5 @@ import lombok.Data;
 public class BookPageRequest extends BaseRequest{
     private String name;
     private String bookNo;
+    private String isRecommend;
 }

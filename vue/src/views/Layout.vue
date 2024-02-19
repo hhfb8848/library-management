@@ -27,7 +27,7 @@
             <i class="el-icon-eleme"></i>
             <span>首页</span>
           </el-menu-item>
-          <el-submenu index="user">
+          <el-submenu index="user" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-question"></i>
               <span>会员管理</span>
@@ -35,15 +35,15 @@
             <el-menu-item index="/addUser">会员添加</el-menu-item>
             <el-menu-item index="/userList">会员列表</el-menu-item>
           </el-submenu>
-          <el-submenu index="admin">
+          <el-submenu index="admin" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-user"></i>
               <span>管理员管理</span>
             </template>
-            <el-menu-item index="/addAdmin">管理员添加</el-menu-item>
-            <el-menu-item index="/adminList">管理员列表</el-menu-item>
+            <el-menu-item index="/addAdmin" v-if="this.admin.loginType == 'admin'">管理员添加</el-menu-item>
+            <el-menu-item index="/adminList" v-if="this.admin.loginType == 'admin'">管理员列表</el-menu-item>
           </el-submenu>
-          <el-submenu index="category">
+          <el-submenu index="category" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-s-operation"></i>
               <span>图书分类管理</span>
@@ -51,15 +51,16 @@
             <el-menu-item index="/addCategory">图书分类添加</el-menu-item>
             <el-menu-item index="/categoryList">图书分类列表</el-menu-item>
           </el-submenu>
-          <el-submenu index="book">
+          <el-submenu index="book" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-notebook-1"></i>
               <span>图书管理</span>
             </template>
             <el-menu-item index="/addBook">图书添加</el-menu-item>
             <el-menu-item index="/bookList">图书列表</el-menu-item>
+            <el-menu-item index="/recommend">图书推荐</el-menu-item>
           </el-submenu>
-          <el-submenu index="borrow">
+          <el-submenu index="borrow" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-document-copy"></i>
               <span>借书管理</span>
@@ -67,13 +68,17 @@
             <el-menu-item index="/addBorrow">借书添加</el-menu-item>
             <el-menu-item index="/borrowList">借书列表</el-menu-item>
           </el-submenu>
-          <el-submenu index="retur">
+          <el-submenu index="retur" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
               <i class="el-icon-document"></i>
               <span>还书管理</span>
             </template>
             <el-menu-item index="/returList">还书列表</el-menu-item>
           </el-submenu>
+                    <el-menu-item index="/center">
+            <i class="el-icon-eleme"></i>
+            <span>个人中心</span>
+          </el-menu-item>
         </el-menu>
       </div>
 
@@ -95,6 +100,9 @@ export default {
     return {
       admin: Cookies.get('admin') ? JSON.parse(Cookies.get('admin')) : {}
     }
+  },
+  mounted(){
+    console.log(this.admin,'dd');
   },
   methods: {
     logout() {

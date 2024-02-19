@@ -7,8 +7,10 @@ import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.controller.request.LoginRequest;
 import com.example.springboot.controller.request.PasswordRequest;
 import com.example.springboot.entity.Admin;
+import com.example.springboot.entity.User;
 import com.example.springboot.exception.ServiceException;
 import com.example.springboot.mapper.AdminMapper;
+import com.example.springboot.mapper.UserMapper;
 import com.example.springboot.service.IAdminService;
 import com.example.springboot.utils.TokenUtils;
 import com.github.pagehelper.PageHelper;
@@ -29,8 +31,11 @@ public class AdminService implements IAdminService {
     @Autowired
     AdminMapper adminMapper;
 
+    @Autowired
+    UserMapper userMapper;
+
     private static final String DEFAULT_PASS = "123";
-    private static final String PASS_SALT = "qingge";
+    private static final String PASS_SALT = "zhangxuebiao";
 
     @Override
     public List<Admin> list() {
@@ -78,29 +83,58 @@ public class AdminService implements IAdminService {
 
     @Override
     public LoginDTO login(LoginRequest request) {
-        Admin admin = null;
-        try {
-            admin = adminMapper.getByUsername(request.getUsername());
-        } catch (Exception e) {
-            log.error("根据用户名{} 查询出错", request.getUsername());
-            throw new ServiceException("用户名错误");
-        }
-        if (admin == null) {
-            throw new ServiceException("用户名或密码错误");
-        }
-        // 判断密码是否合法
-        String securePass = securePass(request.getPassword());
-        if (!securePass.equals(admin.getPassword())) {
-            throw new ServiceException("用户名或密码错误");
-        }
-        if (!admin.isStatus()) {
-            throw new ServiceException("当前用户处于禁用状态，请联系管理员");
-        }
+        String token = "";
         LoginDTO loginDTO = new LoginDTO();
-        BeanUtils.copyProperties(admin, loginDTO);
+        if (request.getLoginType().equals("admin")){
+            Admin admin = null;
+            try {
+                admin = adminMapper.getByUsername(request.getUsername());
+            } catch (Exception e) {
+                log.error("根据用户名{} 查询出错", request.getUsername());
+                throw new ServiceException("用户名错误");
+            }
+            if (admin == null) {
+                throw new ServiceException("用户名或密码错误");
+            }
+            // 判断密码是否合法
+            String securePass = securePass(request.getPassword());
+            System.out.println(securePass);
+            if (!securePass.equals(admin.getPassword())) {
+                throw new ServiceException("用户名或密码错误");
+            }
+            if (!admin.isStatus()) {
+                throw new ServiceException("当前用户处于禁用状态，请联系管理员");
+            }
+            BeanUtils.copyProperties(admin, loginDTO);
+            // 生成token
+            token = TokenUtils.genToken(String.valueOf(admin.getId()), admin.getPassword());
 
-        // 生成token
-        String token = TokenUtils.genToken(String.valueOf(admin.getId()), admin.getPassword());
+            loginDTO.setLoginType("admin");
+        }else{
+            User user = null;
+            try {
+                user = userMapper.getByUsername(request.getUsername());
+            } catch (Exception e) {
+                log.error("根据用户名{} 查询出错", request.getUsername());
+                throw new ServiceException("用户名错误");
+            }
+            if (user == null) {
+                throw new ServiceException("用户名或密码错误");
+            }
+            // 判断密码是否合法
+            String securePass = securePass(request.getPassword());
+            if (!securePass.equals(user.getPassword())) {
+                throw new ServiceException("用户名或密码错误");
+            }
+            if (!user.isStatus()) {
+                throw new ServiceException("当前用户处于禁用状态，请联系管理员");
+            }
+            BeanUtils.copyProperties(user, loginDTO);
+            // 生成token
+            token = TokenUtils.genToken(String.valueOf(user.getId()), user.getPassword());
+            loginDTO.setLoginType("user");
+        }
+
         loginDTO.setToken(token);
         return loginDTO;
     }

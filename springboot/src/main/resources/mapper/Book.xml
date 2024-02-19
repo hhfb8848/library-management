@@ -13,6 +13,9 @@
             <if test="bookNo != null and bookNo != ''">
                 and book_no = #{bookNo}
             </if>
+            <if test="isRecommend != null">
+                and is_recommend = #{isRecommend}
+            </if>
         </where>
         order by id desc
     </select>
@@ -30,6 +33,10 @@
 
     <update id="updateNumByNo">
         update book set nums = nums + 1 where book_no = #{bookNo}
+    </update>
+
+    <update id="updateRecommend">
+        update book set is_recommend = #{isRecommend} where id = #{id}
     </update>
 
     <delete id="deleteById">

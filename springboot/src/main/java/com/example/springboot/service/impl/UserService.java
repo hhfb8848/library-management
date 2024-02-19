@@ -2,6 +2,7 @@ package com.example.springboot.service.impl;
 
 import cn.hutool.core.date.DateUtil;
 import cn.hutool.core.util.IdUtil;
+import cn.hutool.crypto.SecureUtil;
 import com.example.springboot.controller.request.BaseRequest;
 import com.example.springboot.controller.request.UserPageRequest;
 import com.example.springboot.entity.User;
@@ -18,6 +19,7 @@ import java.util.List;
 @Service
 public class UserService implements IUserService {
 
+    private static final String PASS_SALT = "zhangxuebiao";
     @Autowired
     UserMapper userMapper;
 
@@ -37,7 +39,8 @@ public class UserService implements IUserService {
     public void save(User user) {
         Date date = new Date();
         // 当做卡号来处理
-        user.setUsername(DateUtil.format(date, "yyyyMMdd") + Math.abs(IdUtil.fastSimpleUUID().hashCode()));
+        user.setUsername(user.getName()+user.getPhone());
+        user.setPassword(SecureUtil.md5(user.getPassword() + PASS_SALT));
         userMapper.save(user);
     }
 

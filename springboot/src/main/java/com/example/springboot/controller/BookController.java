@@ -6,6 +6,7 @@ import com.example.springboot.common.Result;
 import com.example.springboot.controller.request.BookPageRequest;
 import com.example.springboot.entity.Admin;
 import com.example.springboot.entity.Book;
+import com.example.springboot.mapper.BookMapper;
 import com.example.springboot.service.IBookService;
 import com.example.springboot.utils.TokenUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,9 @@ public class BookController {
 
     @Autowired
     IBookService bookService;
+
+    @Autowired
+    BookMapper bookMapper;
 
     private static final String BASE_FILE_PATH = System.getProperty("user.dir") + "/files/";
 
@@ -112,4 +116,24 @@ public class BookController {
         return Result.success(bookService.page(pageRequest));
     }
 
+    @PutMapping("/recommend")
+    public Result recommend(@RequestBody Integer[] ids) {
+        for (Integer id : ids) {
+            Book book = new Book();
+            book.setId(id);
+            book.setIsRecommend(1);
+            bookMapper.updateRecommend(book);
+        }
+        return Result.success();
+    }
+    @PutMapping("/cancelRecommend/{id}")
+    public Result cancelRecommend(@PathVariable Integer id) {
+
+            Book book = new Book();
+            book.setId(id);
+            book.setIsRecommend(0);
+            bookMapper.updateRecommend(book);
+
+        return Result.success();
+    }
 }

@@ -19,6 +19,8 @@ public interface BookMapper {
 
     void updateById(Book user);
 
+    void updateRecommend(Book book);
+
     void deleteById(Integer id);
 
     Book getByNo(String bookNo);

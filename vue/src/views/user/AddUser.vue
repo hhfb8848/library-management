@@ -5,6 +5,7 @@
       <el-form-item label="姓名" prop="name">
         <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
       </el-form-item>
+
       <el-form-item label="年龄" prop="age">
         <el-input v-model="form.age" placeholder="请输入年龄"></el-input>
       </el-form-item>
@@ -20,6 +21,9 @@
       </el-form-item>
             <el-form-item label="初始账号积分" prop="address">
         <el-input v-model="form.account" placeholder="积分" type="number"></el-input>
+      </el-form-item>
+                  <el-form-item label="登录密码" prop="password">
+        <el-input v-model="form.password" placeholder="请输入登录密码"></el-input>
       </el-form-item>
     </el-form>
 
@@ -58,6 +62,10 @@ export default {
       rules: {
         name: [
           { required: true, message: '请输入姓名', trigger: 'blur'}
+        ],
+                password: [
+          { required: true, message: "请输入密码", trigger: "blur" },
+          { min: 3, max: 10, message: "长度在3-10个字符", trigger: "blur" },
         ],
         age: [
           { validator: checkAge, trigger: 'blur' }
