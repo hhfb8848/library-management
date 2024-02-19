@@ -121,6 +121,12 @@ const routes = [
         name: "center",
         component: () => import("@/views/center/index.vue"),
       },
+      // 记录
+      {
+        path: "borrowRecord",
+        name: "BorrowRecord",
+        component: () => import("@/views/record/BorrowRecord.vue"),
+      },
     ],
   },
   {

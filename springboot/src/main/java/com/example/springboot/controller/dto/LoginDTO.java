@@ -11,4 +11,6 @@ public class LoginDTO {
     private String token;
 
     private String loginType;
+
+    private String name;
 }

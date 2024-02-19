@@ -1,18 +1,35 @@
 <template>
   <div>
     <!-- 头部区域 -->
-    <div style="height: 60px; line-height: 60px; background-color: white; margin-bottom: 2px; display: flex">
+    <div
+      style="
+        height: 60px;
+        line-height: 60px;
+        background-color: white;
+        margin-bottom: 2px;
+        display: flex;
+      "
+    >
       <div style="width: 300px">
-        <img src="@/assets/logo.png" alt="" style="width: 40px; position: relative; top: 10px; left: 20px">
+        <img
+          src="@/assets/logo.png"
+          alt=""
+          style="width: 40px; position: relative; top: 10px; left: 20px"
+        />
         <span style="margin-left: 25px; font-size: 24px">图书管理系统</span>
       </div>
       <div style="flex: 1; text-align: right; padding-right: 20px">
         <el-dropdown size="medium">
           <span class="el-dropdown-link" style="cursor: pointer">
-            {{ admin.username }}<i class="el-icon-arrow-down el-icon--right"></i>
+            {{ admin.username
+            }}<i class="el-icon-arrow-down el-icon--right"></i>
           </span>
           <el-dropdown-menu slot="dropdown" style="margin-top: -5px">
-            <el-dropdown-item><div style="width: 50px; text-align: center;" @click="logout">退出</div></el-dropdown-item>
+            <el-dropdown-item
+              ><div style="width: 50px; text-align: center" @click="logout">
+                退出
+              </div></el-dropdown-item
+            >
           </el-dropdown-menu>
         </el-dropdown>
       </div>
@@ -21,8 +38,21 @@
     <!-- 侧边栏和主体 -->
     <div style="display: flex">
       <!-- 侧边栏导航 -->
-      <div style="width: 200px; min-height: calc(100vh - 62px); overflow: hidden; margin-right: 2px; background-color: white">
-        <el-menu :default-active="$route.path" router class="el-menu-demo" style="margin-bottom: 10px">
+      <div
+        style="
+          width: 200px;
+          min-height: calc(100vh - 62px);
+          overflow: hidden;
+          margin-right: 2px;
+          background-color: white;
+        "
+      >
+        <el-menu
+          :default-active="$route.path"
+          router
+          class="el-menu-demo"
+          style="margin-bottom: 10px"
+        >
           <el-menu-item index="/">
             <i class="el-icon-eleme"></i>
             <span>首页</span>
@@ -40,8 +70,16 @@
               <i class="el-icon-user"></i>
               <span>管理员管理</span>
             </template>
-            <el-menu-item index="/addAdmin" v-if="this.admin.loginType == 'admin'">管理员添加</el-menu-item>
-            <el-menu-item index="/adminList" v-if="this.admin.loginType == 'admin'">管理员列表</el-menu-item>
+            <el-menu-item
+              index="/addAdmin"
+              v-if="this.admin.loginType == 'admin'"
+              >管理员添加</el-menu-item
+            >
+            <el-menu-item
+              index="/adminList"
+              v-if="this.admin.loginType == 'admin'"
+              >管理员列表</el-menu-item
+            >
           </el-submenu>
           <el-submenu index="category" v-if="this.admin.loginType == 'admin'">
             <template slot="title">
@@ -75,7 +113,12 @@
             </template>
             <el-menu-item index="/returList">还书列表</el-menu-item>
           </el-submenu>
-                    <el-menu-item index="/center">
+
+          <el-menu-item index="/borrowRecord" v-else>
+            <i class="el-icon-eleme"></i>
+            <span>借阅记录</span>
+          </el-menu-item>
+          <el-menu-item index="/center">
             <i class="el-icon-eleme"></i>
             <span>个人中心</span>
           </el-menu-item>
@@ -92,28 +135,26 @@
 </template>
 
 <script>
-import Cookies from 'js-cookie'
+import Cookies from "js-cookie";
 
 export default {
   name: "Layout.vue",
   data() {
     return {
-      admin: Cookies.get('admin') ? JSON.parse(Cookies.get('admin')) : {}
-    }
+      admin: Cookies.get("admin") ? JSON.parse(Cookies.get("admin")) : {},
+    };
   },
-  mounted(){
-    console.log(this.admin,'dd');
+  mounted() {
+    console.log(this.admin, "dd");
   },
   methods: {
     logout() {
       // 清除浏览器用户数据
-      Cookies.remove('admin')
-      this.$router.push('/login')
-    }
-  }
-}
+      Cookies.remove("admin");
+      this.$router.push("/login");
+    },
+  },
+};
 </script>
 
-<style scoped>
-
-</style>
+<style scoped></style>
